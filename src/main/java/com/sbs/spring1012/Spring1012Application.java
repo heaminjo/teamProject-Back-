@@ -4,8 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@EnableJpaAuditing
-//@ComponentScan(basePackages = "com.sbs.spring1012")
 @SpringBootApplication
 public class Spring1012Application {
 
