@@ -46,6 +46,7 @@ public class Member extends BaseDateEntity {
     //팔로윙 수
     private int followee;
 
+    private String image;
     //탈퇴여부
     @Column(name = "is_withdraw")
     private boolean isWithdraw;
@@ -57,7 +58,8 @@ public class Member extends BaseDateEntity {
     @Builder
     public Member(String email,String pwd,String alias,String address,
                    List<String>tag,int follower,int followee,
-                  Authority authority){
+                  Authority authority,String image
+    ){
         this.email = email;
         this.pwd = pwd;
         this.alias = alias;
@@ -66,6 +68,7 @@ public class Member extends BaseDateEntity {
         this.follower = follower;
         this.followee = followee;
         this.authority = authority;
+        this.image = image;
     }
 
 }
