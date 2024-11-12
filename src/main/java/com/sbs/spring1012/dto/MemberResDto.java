@@ -17,6 +17,7 @@ public class MemberResDto {
     private String email;
     private String alias;
     private String address;
+    private String image;
     private List<String> tag;
     private int follower;
     private int followee;
@@ -29,6 +30,7 @@ public class MemberResDto {
                 .email(member.getEmail())
                 .alias(member.getAlias())
                 .address(member.getAddress())
+                .image(member.getImage())
                 .tag(member.getTag())
                 .follower(member.getFollower())
                 .followee(member.getFollowee())
