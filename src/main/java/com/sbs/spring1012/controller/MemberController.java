@@ -1,7 +1,7 @@
 package com.sbs.spring1012.controller;
 
+import com.sbs.spring1012.dto.MemberReqDto;
 import com.sbs.spring1012.dto.MemberResDto;
-import com.sbs.spring1012.security.SecurityUtil;
 import com.sbs.spring1012.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +24,17 @@ public class MemberController {
         return ResponseEntity.ok(memberResDto);
     }
     // 회원 상세 조회
-@GetMapping("/detail")
-public ResponseEntity<MemberResDto> memberDetail(){
-    Long id = SecurityUtil.getCurrentMemberId();
-    log.info("id : {} ", id);
-    MemberResDto memberResDto = memberService.getMemberDetail(id);
-    return ResponseEntity.ok(memberResDto);
-}
-
+//@GetMapping("/detail/{email}")
+//public ResponseEntity<MemberResDto> memberDetail(){
+//    log.info("id : {} ", id);
+//    MemberResDto memberResDto = memberService.getMemberDetail(email);
+//    return ResponseEntity.ok(memberResDto);
+//}
+    //회원 수정
+    @PutMapping("/modify")
+    public ResponseEntity<Boolean> memberModify(@RequestBody  MemberReqDto memberReqDto){
+        Boolean bool = memberService.memberModify(memberReqDto);
+        return ResponseEntity.ok(bool);
+    }
 
 }

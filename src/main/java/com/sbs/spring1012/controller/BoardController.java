@@ -1,10 +1,8 @@
 package com.sbs.spring1012.controller;
 
-import com.sbs.spring1012.dto.BoardReqDto;
-import com.sbs.spring1012.dto.BoardResDto;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController  //Rest API에 대한 요청과 응답처리를 위한 어노테이션

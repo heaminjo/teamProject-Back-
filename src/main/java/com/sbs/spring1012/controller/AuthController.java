@@ -2,7 +2,6 @@ package com.sbs.spring1012.controller;
 
 import com.sbs.spring1012.dto.MemberReqDto;
 import com.sbs.spring1012.dto.MemberResDto;
-import com.sbs.spring1012.dto.TokenDto;
 import com.sbs.spring1012.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
