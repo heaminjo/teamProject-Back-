@@ -1,19 +1,14 @@
 package com.sbs.spring1012.service;
 
+import com.sbs.spring1012.dto.MemberReqDto;
 import com.sbs.spring1012.dto.MemberResDto;
 import com.sbs.spring1012.entity.Member;
 import com.sbs.spring1012.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j //로그 메시지 출력
@@ -34,6 +29,23 @@ public class MemberService {
     public MemberResDto getMemberDetail(Long id){
         Member member = memberRepository.findById(id).orElseThrow(()-> new RuntimeException("해당 회원이 존재하지 않습니다."));
         return MemberResDto.of(member);
+    }
+    //회원 수정
+    public Boolean memberModify(MemberReqDto memberReqDto){
+        try{
+            Member member = memberRepository.findByEmail(memberReqDto.getEmail())
+                    .orElseThrow(()->new RuntimeException("존재하지않는 회원입니다."));
+
+            member.setAlias(memberReqDto.getAlias());
+            member.setAddress(memberReqDto.getAddress());
+            member.setImage(memberReqDto.getImage());
+            memberRepository.save(member);
+            return true;
+        }catch (Exception e){
+
+            return false;
+        }
+
     }
 
 
