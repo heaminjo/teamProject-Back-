@@ -36,9 +36,9 @@ public class Member extends BaseDateEntity {
     @Column(name = "address",nullable = false)
     private String address;
 
-    //관심태그
-    @Convert(converter = StringListConverter.class)
-    private List<String> tag;
+    //관심태그(보류)
+    // @Convert(converter = StringListConverter.class)
+    // private List<String> tag;
 
     //팔로워 수
     private int follower;
@@ -64,7 +64,7 @@ public class Member extends BaseDateEntity {
         this.pwd = pwd;
         this.alias = alias;
         this.address = address;
-        this.tag = tag;
+        // this.tag = tag; 보류
         this.follower = follower;
         this.followee = followee;
         this.authority = authority;
