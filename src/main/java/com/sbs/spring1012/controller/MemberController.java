@@ -33,8 +33,13 @@ public class MemberController {
     //회원 수정
     @PutMapping("/modify")
     public ResponseEntity<Boolean> memberModify(@RequestBody  MemberReqDto memberReqDto){
-        Boolean bool = memberService.memberModify(memberReqDto);
-        return ResponseEntity.ok(bool);
+        Boolean isTrue = memberService.memberModify(memberReqDto);
+        return ResponseEntity.ok(isTrue);
     }
-
+    //회원탈퇴
+    @PostMapping("/secession")
+    public ResponseEntity<Boolean> memberSecession(@PathVariable String email){
+        Boolean isTrue = memberService.memberSecession(email);
+        return ResponseEntity.ok(isTrue);
+    }
 }
