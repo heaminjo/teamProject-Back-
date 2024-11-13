@@ -18,7 +18,7 @@ public class MemberResDto {
     private String alias;
     private String address;
     private String image;
-    private List<String> tag;
+//    private List<String> tag;
     private int follower;
     private int followee;
     private LocalDateTime regDate;
@@ -31,7 +31,7 @@ public class MemberResDto {
                 .alias(member.getAlias())
                 .address(member.getAddress())
                 .image(member.getImage())
-                .tag(member.getTag())
+//                .tag(member.getTag()) 보류
                 .follower(member.getFollower())
                 .followee(member.getFollowee())
                 .regDate(member.getCreateDate())

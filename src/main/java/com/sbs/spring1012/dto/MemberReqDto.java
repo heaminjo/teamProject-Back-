@@ -14,7 +14,7 @@ public class MemberReqDto {
     private String email;
     private String alias;
     private String address;
-    private List<String> tag;
+//    private List<String> tag;
     private String image;
 
     //toEntity : MemberReqDto -> Entity로 변환
