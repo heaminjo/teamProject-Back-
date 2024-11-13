@@ -14,8 +14,9 @@ public class BoardResDto {
     private String title;
     private String content;
     private String boardType;
-    private List<String> tag;
+//    private List<String> tag; (보류)
     private int views;        //조회수
     private int greatNum;     //좋아요
+    private String img;
     private LocalDateTime regDate;
 }
