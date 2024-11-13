@@ -14,8 +14,8 @@ import java.util.Optional;
 @Slf4j //로그 메시지 출력
 @Service  //스프링 빈 컨테이너에 등록
 @RequiredArgsConstructor//생성자를 통해서 의존성 주입을 받기위한 어노테이션
+//UserDetailService : 데이터베이스에서 회원정보를 가져오는 역할4
 @Transactional
-//UserDetailService : 데이터베이스에서 회원정보를 가져오는 역할
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -31,7 +31,7 @@ public class MemberService {
         return MemberResDto.of(member);
     }
     //회원 수정
-    public Boolean memberModify(MemberReqDto memberReqDto){
+    public boolean memberModify(MemberReqDto memberReqDto){
         try{
             Member member = memberRepository.findByEmail(memberReqDto.getEmail())
                     .orElseThrow(()->new RuntimeException("존재하지않는 회원입니다."));
@@ -42,11 +42,37 @@ public class MemberService {
             memberRepository.save(member);
             return true;
         }catch (Exception e){
+            return false;
+        }
+    }
+    //회원탈퇴
+    public boolean memberSecession(String email){
+        try{
+            Member member = memberRepository.findByEmail(email)
+                    .orElseThrow(()-> new RuntimeException("존재하지않는 회원입니다."));
 
+            member.setWithdraw(true);
+            member.setEmail(member.getEmail().concat("-"));
+            member.setAlias("");
+            member.setImage("");
+            member.setFollowee(0);
+            member.setFollower(0);
+            member.setAddress("");
+            memberRepository.save(member);
+            return true;
+        }catch(Exception e){
             return false;
         }
 
     }
+
+
+
+
+
+
+
+
 
 
 }
