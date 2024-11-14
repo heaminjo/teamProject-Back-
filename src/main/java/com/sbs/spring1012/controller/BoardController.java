@@ -21,5 +21,10 @@ public class BoardController {
         Boolean isTrue = boardService.boardInsert(boardReqDto,email);
         return ResponseEntity.ok(isTrue);
     }
-
+    //게시글 수정
+    @PostMapping("/modify")
+    public ResponseEntity<Boolean> boardModify(@RequestBody BoardReqDto boardReqDto){
+        Boolean isTrue = boardService.boardModify(boardReqDto);
+        return ResponseEntity.ok(isTrue);
+    }
 }
