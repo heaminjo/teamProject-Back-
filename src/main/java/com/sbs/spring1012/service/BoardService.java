@@ -31,22 +31,14 @@ public class BoardService {
             Board board = new Board();
 
             board.setMember(member);
-            System.out.println("member저장!");
             board.setCategory(category);
-            System.out.println("cate저장!");
             board.setTitle(boardReqDto.getTitle());
-            System.out.println("title 저장");
             board.setContent(boardReqDto.getContent());
-            System.out.println("content 저장!");
-            board.setBoardType(board.getBoardType());
-            System.out.println("type저장!");
-            board.setImg(board.getImg());
-            System.out.println("img저장!");
+            board.setBoardType(boardReqDto.getBoardType());
+            board.setImg(boardReqDto.getImg());
 
             System.out.println(board.getTitle());
             boardRepository.save(board);
-
-            System.out.println("저장!");
             return true;
 
         } catch (Exception e) {
@@ -54,6 +46,44 @@ public class BoardService {
             return false;
         }
     }
+ public boolean boardModify(BoardReqDto boardReqDto){
+        try{
+            System.out.println("수정한다.");
+            Board board = boardRepository.findById(boardReqDto.getId()).orElseThrow(
+                    () -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
+            System.out.println("게시물 있음.");
 
+            Category category = categoryRepository.findByCategoryName(boardReqDto.getCategoryName()).orElseThrow(
+                    ()-> new RuntimeException("존재하지않는 카테고리입니다."));
+            System.out.println("카테고리 있음.");
+
+            // 값이 null이 아니면 업데이트, null이면 기존 값 유지
+            System.out.println(category.getCategoryName());
+            if (boardReqDto.getCategoryName() != null) {
+                board.setCategory(category);
+            }
+            if (boardReqDto.getCategoryName() != null) {
+                board.setCategory(category);
+            }
+            if (boardReqDto.getBoardType() != null) {
+                board.setBoardType(boardReqDto.getBoardType());
+            }
+            if (boardReqDto.getTitle() != null) {
+                board.setTitle(boardReqDto.getTitle());
+            }
+            if (boardReqDto.getImg() != null) {
+                board.setImg(boardReqDto.getImg());
+            }
+            if (boardReqDto.getContent() != null) {
+                board.setContent(boardReqDto.getContent());
+            }
+
+
+            boardRepository.save(board);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
 
