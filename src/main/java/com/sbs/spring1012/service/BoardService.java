@@ -2,11 +2,10 @@ package com.sbs.spring1012.service;
 
 import com.sbs.spring1012.dto.BoardReqDto;
 import com.sbs.spring1012.dto.BoardResDto;
-import com.sbs.spring1012.entity.Board;
-import com.sbs.spring1012.entity.Category;
-import com.sbs.spring1012.entity.Member;
+import com.sbs.spring1012.entity.*;
 import com.sbs.spring1012.repository.BoardRepository;
 import com.sbs.spring1012.repository.CategoryRepository;
+import com.sbs.spring1012.repository.GreateRepository;
 import com.sbs.spring1012.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.xml.stream.Location;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j //로그 메시지 출력
 @Service  //스프링 빈 컨테이너에 등록
@@ -24,6 +24,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final GreateRepository greateRepository;
 
     public boolean boardInsert(BoardReqDto boardReqDto,String email) {
         try {
@@ -127,6 +128,39 @@ public class BoardService {
             boardRepository.save(board);
             return true;
         }catch (Exception e){
+            return false;
+        }
+    }
+
+    //게시글 좋아요
+    public boolean greatBoard(Long boardId, Long memberId){
+        try {
+            Board board = boardRepository.findById(boardId).orElseThrow(
+                    () -> new RuntimeException("존재하지않는 게시글입니다.")
+            );
+            Member member = memberRepository.findById(memberId).orElseThrow(
+                    () -> new RuntimeException("존재하지않는 회원입니다.")
+            );
+
+            Optional<Great> great= greateRepository.findByBoardAndMember(board,member);
+
+            //좋아요가 눌려있다면 좋아요 삭제
+            if(great.isPresent()){
+                greateRepository.delete(great.get());
+                board.setGreatNum(board.getGreatNum()-1); //좋아요 개수 감소
+            }
+            //안 눌려있다면 좋아요 추가
+            else {
+                Great newGreate = new Great();
+                newGreate.setBoard(board);
+                newGreate.setMember(member);
+
+                board.setGreatNum(board.getGreatNum()+1); //좋아요 개수 증가
+                greateRepository.save(newGreate);
+            }
+            boardRepository.save(board);
+            return true;
+        } catch (Exception e) {
             return false;
         }
     }
