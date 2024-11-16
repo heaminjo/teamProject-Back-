@@ -59,7 +59,11 @@ public class BoardController {
         return ResponseEntity.ok(isTrue);
     }
 
-    //좋아요
-
+    //게시글 좋아요
+    @GetMapping("detail/great/{boardId}/{memberId}")
+    public ResponseEntity<Boolean> boardGreat(@PathVariable Long boardId,@PathVariable Long memberId){
+        Boolean isTrue = boardService.greatBoard(boardId,memberId);
+        return ResponseEntity.ok(isTrue);
+    }
 }
 
