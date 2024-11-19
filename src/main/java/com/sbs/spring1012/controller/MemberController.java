@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequestMapping("/member") //대표경로 지정
 @RequiredArgsConstructor //생성자를 통한 의존성 주입
-@CrossOrigin(origins = "http/localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 
 public class MemberController {
     private final MemberService memberService;

@@ -13,7 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/comment") //대표경로 지정
 @RequiredArgsConstructor //생성자를 통한 의존성 주입
-@CrossOrigin(origins = "http/localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
+
 public class CommentController {
     private final CommentService commentService;
 

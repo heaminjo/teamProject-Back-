@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/board") //대표경로 지정
 @RequiredArgsConstructor //생성자를 통한 의존성 주입
-@CrossOrigin(origins = "http/localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 public class BoardController {
     private final BoardService boardService;
     //게시글 등록
