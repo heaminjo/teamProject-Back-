@@ -19,15 +19,15 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    //회원검색
-    public MemberResDto userSearch(String alias){
-        Optional<Member> member = memberRepository.findByAlias(alias);
-        //member에 값이 있다면 dto로 변환하여 방환 아니라면 null반환
-        return member.map(MemberResDto::of).orElse(null);
-    }
+//    //회원검색
+//    public MemberResDto userSearch(String alias){
+//        Optional<Member> member = memberRepository.findByAlias(alias);
+//        //member에 값이 있다면 dto로 변환하여 방환 아니라면 null반환
+//        return member.map(MemberResDto::of).orElse(null);
+//    }
     // 회원 상세 조회
-    public MemberResDto getMemberDetail(Long id){
-        Member member = memberRepository.findById(id).orElseThrow(()-> new RuntimeException("해당 회원이 존재하지 않습니다."));
+    public MemberResDto getMemberDetail(String email){
+        Member member = memberRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("해당 회원이 존재하지 않습니다."));
         return MemberResDto.of(member);
     }
     //회원 수정
@@ -35,7 +35,8 @@ public class MemberService {
         try{
             Member member = memberRepository.findByEmail(memberReqDto.getEmail())
                     .orElseThrow(()->new RuntimeException("존재하지않는 회원입니다."));
-
+            member.setPwd(memberReqDto.getPwd());
+            member.setPhone(memberReqDto.getPhone());
             member.setAlias(memberReqDto.getAlias());
             member.setAddress(memberReqDto.getAddress());
             member.setImage(memberReqDto.getImage());
@@ -55,6 +56,8 @@ public class MemberService {
             member.setEmail(member.getEmail().concat("-"));
             member.setAlias("");
             member.setImage("");
+            member.setPhone("");
+            member.setName("");
             member.setFollowee(0);
             member.setFollower(0);
             member.setAddress("");
