@@ -6,6 +6,7 @@ import com.sbs.spring1012.dto.BoardResDto;
 import com.sbs.spring1012.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +53,21 @@ public class BoardController {
         return ResponseEntity.ok(list);
     }
 
+    //게시글 조회 페이지네이션
+    @GetMapping("/list/page")
+    public ResponseEntity<List<BoardResDto>> boardList(@RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "4") int size){
+        List<BoardResDto> boardList = boardService.getBoardList(page,size);
+        return ResponseEntity.ok(boardList);
+    }
+    //페이지 수 조회
+    @GetMapping("/count")
+    public ResponseEntity<Integer> listBoards(@RequestParam(defaultValue = "0")int page,
+                                              @RequestParam(defaultValue = "4") int size){
+        PageRequest pageRequest = PageRequest.of(page,size);
+        Integer pageCnt = boardService.getBoards(pageRequest);
+        return ResponseEntity.ok(pageCnt);
+    }
     //조회수
     @GetMapping("detail/view/{id}")
     public ResponseEntity<Boolean> boardView(@PathVariable Long id){
