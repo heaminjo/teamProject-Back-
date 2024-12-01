@@ -12,10 +12,8 @@ import java.util.List;
 @ToString
 @Builder
 public class BoardReqDto {
-    private Long id;
     private String title;
     private String content;
-    private String boardType;
     private String categoryName;
 //    private List<String> tag; (보류)
     private String img;

@@ -14,6 +14,8 @@ public class MemberReqDto {
     private String email;
     private String alias;
     private String address;
+    private String name;
+    private String phone;
 //    private List<String> tag;
     private String image;
 

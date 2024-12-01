@@ -9,6 +9,10 @@ import com.sbs.spring1012.repository.GreateRepository;
 import com.sbs.spring1012.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +20,7 @@ import javax.xml.stream.Location;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j //로그 메시지 출력
 @Service  //스프링 빈 컨테이너에 등록
@@ -26,6 +31,7 @@ public class BoardService {
     private final CategoryRepository categoryRepository;
     private final GreateRepository greateRepository;
 
+    //게시물 등록
     public boolean boardInsert(BoardReqDto boardReqDto,String email) {
         try {
             Board board = new Board();
@@ -38,7 +44,6 @@ public class BoardService {
             board.setCategory(category);
             board.setTitle(boardReqDto.getTitle());
             board.setContent(boardReqDto.getContent());
-            board.setBoardType(boardReqDto.getBoardType());
             board.setImg(boardReqDto.getImg());
 
             System.out.println(board.getTitle());
@@ -65,9 +70,6 @@ public class BoardService {
 
             if (boardReqDto.getCategoryName() != null) {
                 board.setCategory(category);
-            }
-            if (boardReqDto.getBoardType() != null) {
-                board.setBoardType(boardReqDto.getBoardType());
             }
             if (boardReqDto.getTitle() != null) {
                 board.setTitle(boardReqDto.getTitle());
@@ -106,17 +108,77 @@ public class BoardService {
 
         return BoardResDto.of(board);
     }
-    //게시글 전제 조회
-    public List<BoardResDto> getBoardList(){
-        List<Board> boards= boardRepository.findAll();
-        List<BoardResDto> list = new ArrayList<>();
 
+    //엔티티 -> dto
+    private BoardResDto convertEntityToDto (Board board) {
+        BoardResDto boardResDto = new BoardResDto();
+        boardResDto.setId(board.getId());
+        boardResDto.setMemberAlias(board.getMember().getAlias());
+        boardResDto.setMemberImage(board.getMember().getImage());
+        boardResDto.setCategoryName(board.getCategory().getCategoryName());
+        boardResDto.setTitle(board.getTitle());
+        boardResDto.setContent(board.getContent());
+        boardResDto.setImg(board.getImg());
+        boardResDto.setRegDate(board.getCreateDate());
+        boardResDto.setGreatNum(board.getGreatNum());
+        boardResDto.setViews(boardResDto.getViews());
+        return boardResDto;
+    }
+    //게시글 전체 조회
+    public List<BoardResDto> getBoardAll(){
+        List<Board> boards = boardRepository.findAll();
+        List<BoardResDto> boardList = new ArrayList<>();
         for(Board board : boards){
-            list.add(BoardResDto.of(board));
+            boardList.add(BoardResDto.of(board));
         }
-        return list;
+        return boardList;
     }
 
+    //게시글 검색 리스트
+    public List<BoardResDto> searchBoardList (String keyword,String categoryName,Pageable pageable){
+        Page<Board> boardPage = boardRepository.findByKeywordAndCategoryName(keyword, categoryName, pageable);
+        System.out.println("찾기 들어감");
+        System.out.println("pageable:"+pageable);
+        System.out.println("keyword:"+keyword);
+        System.out.println("categoryName:"+categoryName);
+        System.out.println(boardPage.getContent());
+        //Page 객체를 dto로 변환하고
+        //List타입으로 변환하여 반환
+        return boardPage.stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+    //총 페이지 수 조회
+    public int getTotalPage(int page,int size,String keyword,String categoryName){
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Board> boards = boardRepository.findByKeywordAndCategoryName(keyword,categoryName,pageable);
+
+        int totalPages = boards.getTotalPages();
+//        if (totalPages > 0 && page >= totalPages) {
+//
+//            return totalPages - 1;
+//        }
+
+        return totalPages;
+    }
+
+    //게시글 페이지네이션
+    public List<BoardResDto> getPageBoardList(int page,int size,String sort,String keyword,String categoryName){
+        List<BoardResDto> boardList = new ArrayList<>();
+
+        //정렬이 최신순(recent)이라면
+        if(sort.equalsIgnoreCase("recent")){
+            //날짜별로 내림차순하여 최신순으로 제목으로 오름차순한다.
+            Pageable pageableRecent = PageRequest.of(page,size, Sort.by(Sort.Order.desc("createDate"),Sort.Order.asc("title")));
+            boardList = this.searchBoardList(keyword,categoryName,pageableRecent);
+        }
+        //정렬이 과거순이라면(former)
+        else if(sort.equalsIgnoreCase("former")){
+            Pageable pageableFormer = PageRequest.of(page, size,Sort.by(Sort.Order.asc("createDate"),Sort.Order.asc("title")));
+            boardList = this.searchBoardList(keyword,categoryName,pageableFormer);
+        }
+        return boardList;
+    }
     //조회수
     public boolean viewCount(Long id){
         try{
@@ -131,7 +193,6 @@ public class BoardService {
             return false;
         }
     }
-
     //게시글 좋아요
     public boolean greatBoard(Long boardId, Long memberId){
         try {

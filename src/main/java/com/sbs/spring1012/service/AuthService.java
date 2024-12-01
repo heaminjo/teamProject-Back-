@@ -55,7 +55,10 @@ public class AuthService {
         member.setAddress(memberReqDto.getAddress());
         member.setAlias(memberReqDto.getAlias());
         member.setImage(memberReqDto.getImage());
-        member.setTag(memberReqDto.getTag());
+        member.setName(memberReqDto.getName());
+        member.setPhone(memberReqDto.getPhone());
+//        member.setTag(memberReqDto.getTag());  보류
+        member.setWithdraw(false);
         member.setAuthority(Authority.ROLE_USER);
 
         return member;

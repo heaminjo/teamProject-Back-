@@ -18,6 +18,8 @@ public class MemberResDto {
     private String alias;
     private String address;
     private String image;
+    private String name;
+    private String phone;
 //    private List<String> tag;
     private int follower;
     private int followee;
@@ -31,6 +33,8 @@ public class MemberResDto {
                 .alias(member.getAlias())
                 .address(member.getAddress())
                 .image(member.getImage())
+                .name(member.getName())
+                .phone(member.getPhone())
 //                .tag(member.getTag()) 보류
                 .follower(member.getFollower())
                 .followee(member.getFollowee())

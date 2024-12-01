@@ -46,27 +46,34 @@ public class BoardController {
         return ResponseEntity.ok(boardResDto);
     }
 
-    //게시글 전제조회
-    @PostMapping("/list")
-    public ResponseEntity<List<BoardResDto>> boardAll(){
-        List<BoardResDto> list = boardService.getBoardList();
-        return ResponseEntity.ok(list);
-    }
-
-    //게시글 조회 페이지네이션
-    @GetMapping("/list/page")
-    public ResponseEntity<List<BoardResDto>> boardList(@RequestParam(defaultValue = "0") int page,
-                                                       @RequestParam(defaultValue = "4") int size){
-        List<BoardResDto> boardList = boardService.getBoardList(page,size);
+    //게시글 전체조회
+    @GetMapping("/list")
+    public ResponseEntity<List<BoardResDto>> boardList(){
+        List<BoardResDto> boardList = boardService.getBoardAll();
         return ResponseEntity.ok(boardList);
     }
-    //페이지 수 조회
-    @GetMapping("/count")
-    public ResponseEntity<Integer> listBoards(@RequestParam(defaultValue = "0")int page,
-                                              @RequestParam(defaultValue = "4") int size){
-        PageRequest pageRequest = PageRequest.of(page,size);
-        Integer pageCnt = boardService.getBoards(pageRequest);
-        return ResponseEntity.ok(pageCnt);
+    //총 페이지 수 조회
+    @GetMapping("/totalpages")
+    public ResponseEntity<Integer> listBoardPage(
+            @RequestParam(defaultValue = "0")int page,
+            @RequestParam(defaultValue = "4") int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String categoryName) {
+
+        int totalPages = boardService.getTotalPage(page,size,keyword,categoryName);
+        return ResponseEntity.ok(totalPages);
+    }
+    //게시글 목록 (페이지네이션
+    @GetMapping("/list/page")
+    public ResponseEntity<List<BoardResDto>> getBoardList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size,
+            @RequestParam(defaultValue = "recent") String sort, //기본값은 최신순
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String categoryName
+   ){
+        List<BoardResDto> boardList = boardService.getPageBoardList(page,size,sort,keyword,categoryName);
+        return ResponseEntity.ok(boardList);
     }
     //조회수
     @GetMapping("detail/view/{id}")

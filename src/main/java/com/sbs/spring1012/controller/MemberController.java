@@ -17,19 +17,18 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberService memberService;
 
-    //회원 검색(별명으로 검색)
-    @GetMapping("/search/{alias}")
-    public ResponseEntity<MemberResDto> userSearch(@PathVariable String alias){
-        MemberResDto memberResDto = memberService.userSearch(alias);
-        return ResponseEntity.ok(memberResDto);
-    }
+//    //회원 검색(별명으로 검색)
+//    @GetMapping("/search/{alias}")
+//    public ResponseEntity<MemberResDto> userSearch(@PathVariable String alias){
+//        MemberResDto memberResDto = memberService.userSearch(alias);
+//        return ResponseEntity.ok(memberResDto);
+//    }
     // 회원 상세 조회
-//@GetMapping("/detail/{email}")
-//public ResponseEntity<MemberResDto> memberDetail(){
-//    log.info("id : {} ", id);
-//    MemberResDto memberResDto = memberService.getMemberDetail(email);
-//    return ResponseEntity.ok(memberResDto);
-//}
+@GetMapping("/detail/{email}")
+public ResponseEntity<MemberResDto> memberDetail(@PathVariable String email){
+    MemberResDto memberResDto = memberService.getMemberDetail(email);
+    return ResponseEntity.ok(memberResDto);
+}
     //회원 수정
     @PutMapping("/modify")
     public ResponseEntity<Boolean> memberModify(@RequestBody  MemberReqDto memberReqDto){
