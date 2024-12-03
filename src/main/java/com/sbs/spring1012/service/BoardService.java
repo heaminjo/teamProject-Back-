@@ -119,6 +119,7 @@ public class BoardService {
         boardResDto.setTitle(board.getTitle());
         boardResDto.setContent(board.getContent());
         boardResDto.setImg(board.getImg());
+        boardResDto.setMemberId(board.getMember().getId());
         boardResDto.setRegDate(board.getCreateDate());
         boardResDto.setGreatNum(board.getGreatNum());
         boardResDto.setViews(boardResDto.getViews());
@@ -193,13 +194,13 @@ public class BoardService {
             return false;
         }
     }
-    //게시글 좋아요
-    public boolean greatBoard(Long boardId, Long memberId){
+    //게시글 좋아요 업
+    public int greatBoard(Long boardId, String memberEmail){
         try {
             Board board = boardRepository.findById(boardId).orElseThrow(
                     () -> new RuntimeException("존재하지않는 게시글입니다.")
             );
-            Member member = memberRepository.findById(memberId).orElseThrow(
+            Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
                     () -> new RuntimeException("존재하지않는 회원입니다.")
             );
 
@@ -212,17 +213,31 @@ public class BoardService {
             }
             //안 눌려있다면 좋아요 추가
             else {
-                Great newGreate = new Great();
-                newGreate.setBoard(board);
-                newGreate.setMember(member);
+                Great newGreat = new Great();
+                newGreat.setBoard(board);
+                newGreat.setMember(member);
 
                 board.setGreatNum(board.getGreatNum()+1); //좋아요 개수 증가
-                greateRepository.save(newGreate);
+                greateRepository.save(newGreat);
             }
             boardRepository.save(board);
-            return true;
+            return board.getGreatNum();
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //게시글 좋아요 여부
+    public boolean isGreatBoard(Long boardId,String memberEmail){
+        try {
+            Member member = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new RuntimeException("존재하지않는 회원입니다."));
+            Board board = boardRepository.findById(boardId).orElseThrow(()->new RuntimeException("존재하지않는 게시글 입니다."));
+
+            boolean isTrue =  greateRepository.existsByBoardAndMember(board,member);
+            System.out.println(isTrue);
+            return isTrue;
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException(e);
         }
     }
 }
