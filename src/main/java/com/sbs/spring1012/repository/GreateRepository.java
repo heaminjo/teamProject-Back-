@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface GreateRepository extends JpaRepository<Great,Long> {
-    Optional<Great> findByBoardAndMember(Board board, Member member);
+    Boolean existsByBoardAndMember(Board board, Member member);
+    Optional<Great> findByBoardAndMember(Board board ,Member member);
 }
