@@ -3,6 +3,7 @@ package com.sbs.spring1012.controller;
 
 import com.sbs.spring1012.dto.BoardReqDto;
 import com.sbs.spring1012.dto.BoardResDto;
+import com.sbs.spring1012.entity.Great;
 import com.sbs.spring1012.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -83,9 +84,17 @@ public class BoardController {
     }
 
     //게시글 좋아요
-    @GetMapping("detail/great/{boardId}/{memberId}")
-    public ResponseEntity<Boolean> boardGreat(@PathVariable Long boardId,@PathVariable Long memberId){
-        Boolean isTrue = boardService.greatBoard(boardId,memberId);
+    @GetMapping("detail/great/{boardId}/{memberEmail}")
+    public ResponseEntity<Integer> boardGreat(@PathVariable Long boardId, @PathVariable String memberEmail){
+        int great = boardService.greatBoard(boardId,memberEmail);
+
+        return ResponseEntity.ok(great);
+    }
+
+    //게시글 좋아요 여부
+    @GetMapping("detail/isgreat/{boardId}/{memberEmail}")
+    public ResponseEntity<Boolean> isGreatBoard(@PathVariable Long boardId, @PathVariable String memberEmail){
+        boolean isTrue = boardService.isGreatBoard(boardId,memberEmail);
         return ResponseEntity.ok(isTrue);
     }
 }
