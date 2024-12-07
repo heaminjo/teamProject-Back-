@@ -21,9 +21,9 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     //게시글 등록
-    @PostMapping("/insert/{email}")
-    public ResponseEntity<Boolean> boardSave(@RequestBody BoardReqDto boardReqDto,@PathVariable String email){
-        Boolean isTrue = boardService.boardInsert(boardReqDto,email);
+    @PostMapping("/insert")
+    public ResponseEntity<Boolean> boardSave(@RequestBody BoardReqDto boardReqDto){
+        Boolean isTrue = boardService.boardInsert(boardReqDto);
         return ResponseEntity.ok(isTrue);
     }
     //게시글 수정
