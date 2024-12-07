@@ -32,13 +32,15 @@ public class BoardService {
     private final GreateRepository greateRepository;
 
     //게시물 등록
-    public boolean boardInsert(BoardReqDto boardReqDto,String email) {
+    public boolean boardInsert(BoardReqDto boardReqDto) {
         try {
             Board board = new Board();
-            Member member = memberRepository.findByEmail(email).orElseThrow(
+            Member member = memberRepository.findByEmail(boardReqDto.getMemberEmail()).orElseThrow(
                             () -> new RuntimeException("존재하지않는 회원입니다."));
             Category category = categoryRepository.findByCategoryName(boardReqDto.getCategoryName()).orElseThrow(
                     ()-> new RuntimeException("존재하지않는 카테고리입니다."));
+            System.out.println(member);
+            System.out.println(category);
 
             board.setMember(member);
             board.setCategory(category);
