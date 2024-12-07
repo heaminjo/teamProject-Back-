@@ -17,6 +17,7 @@ public class BoardReqDto {
     private String categoryName;
 //    private List<String> tag; (보류)
     private String img;
+    private String memberEmail;
 }
 
 
